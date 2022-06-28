@@ -236,3 +236,4 @@ ECHO #undef LOCTEXT_NAMESPACE>>!%~1!
 ECHO.>>!%~1!
 ECHO IMPLEMENT_MODULE(F!%~2!Module, !%~2!)>>!%~1!
 
+EXIT /b
