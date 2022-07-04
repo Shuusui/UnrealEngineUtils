@@ -1,0 +1,7 @@
+#1.0.1
+- Fixed support for launcher unreal engine version, engine association does not get registered in registry and needs
+	to get read from a local file
+
+#1.0.0
+- Added generate project files button
+- Read out UBT path from registry to generate project files for the current project of the solution

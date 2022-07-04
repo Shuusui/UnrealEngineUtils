@@ -100,6 +100,21 @@ namespace UnrealExtension.Commands
             string[] _uprojectFiles = System.IO.Directory.GetFiles(_slnDir, "*.uproject");
             if (_uprojectFiles.Length <= 0)
             {
+                string[] _generateProjectFiles = System.IO.Directory.GetFiles(_slnDir, "GenerateProjectFiles.bat");
+                if (_generateProjectFiles.Length > 0)
+                {
+                    ProcessStartInfo _generateProjectFilesStartInfo = new ProcessStartInfo
+                    {
+                        FileName = _generateProjectFiles[0]
+                    };
+                    Process _generateProjectFilesProc = new Process
+                    {
+                        StartInfo = _generateProjectFilesStartInfo
+                    };
+                    _generateProjectFilesProc.Start();
+                    return;
+                }
+
                 VsShellUtilities.ShowMessageBox(
                     package,
                     "There is no uproject file in the solution folder. Make sure the directory is of an unreal engine project",
@@ -122,44 +137,72 @@ namespace UnrealExtension.Commands
             }
 
             string _uprojectFile = _uprojectFiles[0];
-            using (System.IO.StreamReader _streamReader = new System.IO.StreamReader(_uprojectFile))
+            using (System.IO.StreamReader _uprojectReader = new System.IO.StreamReader(_uprojectFile))
             {
-                string _json = _streamReader.ReadToEnd();
+                string _uprojectJson = _uprojectReader.ReadToEnd();
 
-                UProjectFileObject _uprojectFileObject = JsonConvert.DeserializeObject<UProjectFileObject>(_json);
+                UProjectFileObject _uprojectFileObject = JsonConvert.DeserializeObject<UProjectFileObject>(_uprojectJson);
                 if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
                 {
-                    const string REGISTRY_ENTRY_PATH = "HKEY_CURRENT_USER\\SOFTWARE\\Epic Games\\Unreal Engine\\Builds";
-                    string _enginePath = Microsoft.Win32.Registry.GetValue(REGISTRY_ENTRY_PATH, _uprojectFileObject.EngineAssociation, "").ToString();
-                    string _ubtPath = System.IO.Path.Combine(_enginePath, "Engine", "Binaries", "DotNET", "UnrealBuildTool", "UnrealBuildTool.exe");
-                    if (System.IO.Directory.Exists(_enginePath) && System.IO.File.Exists(_ubtPath))
+                    string _enginePath = string.Empty;
+                    if (Guid.TryParse(_uprojectFileObject.EngineAssociation, out Guid _))
                     {
-                        string _args = CombineStrings(" ", new string[]
+                        const string REGISTRY_ENTRY_PATH = "HKEY_CURRENT_USER\\SOFTWARE\\Epic Games\\Unreal Engine\\Builds";
+                        _enginePath = Microsoft.Win32.Registry.GetValue(REGISTRY_ENTRY_PATH, _uprojectFileObject.EngineAssociation, "").ToString();
+                    }
+                    else
+                    {
+                        string _programDataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                        string _launcherInstalledPath = System.IO.Path.Combine(_programDataFolderPath, "Epic", "UnrealEngineLauncher", "LauncherInstalled.dat");
+                        if (System.IO.File.Exists(_launcherInstalledPath))
                         {
-                            "-projectfiles",
-                            $"-project={_uprojectFile}",
-                            "-game",
-                            "-engine",
-                            "-progress"
-                        });
-
-                        try
-                        {
-                            ProcessStartInfo _ubtStartInfo = new ProcessStartInfo
+                            using (System.IO.StreamReader _launcherInstalledReader = new System.IO.StreamReader(_launcherInstalledPath))
                             {
-                                FileName = _ubtPath,
-                                Arguments = _args.ToString()
-                            };
-
-                            Process _ubtProcess = new Process
-                            {
-                                StartInfo = _ubtStartInfo
-                            };
-                            _ubtProcess.Start();
+                                string _launcherInstalledJson = _launcherInstalledReader.ReadToEnd();
+                                LauncherInstalledObject _launcherInstalledObject = JsonConvert.DeserializeObject<LauncherInstalledObject>(_launcherInstalledJson);
+                                foreach (Installation _installation in _launcherInstalledObject.InstallationList)
+                                {
+                                    if (_installation.NamespaceId == "ue" && _installation.AppName.Contains(_uprojectFileObject.EngineAssociation))
+                                    {
+                                        _enginePath = _installation.InstallLocation;
+                                        break;
+                                    }
+                                }
+                            }
                         }
-                        catch (Exception _ex)
+                    }
+                    if (!string.IsNullOrEmpty(_enginePath))
+                    {
+                        string _ubtPath = System.IO.Path.Combine(_enginePath, "Engine", "Binaries", "DotNET", "UnrealBuildTool", "UnrealBuildTool.exe");
+                        if (System.IO.Directory.Exists(_enginePath) && System.IO.File.Exists(_ubtPath))
                         {
-                            Console.WriteLine(_ex.Message);
+                            string _args = CombineStrings(" ", new string[]
+                            {
+                                "-projectfiles",
+                                $"-project={_uprojectFile}",
+                                "-game",
+                                "-engine",
+                                "-progress"
+                            });
+
+                            try
+                            {
+                                ProcessStartInfo _ubtStartInfo = new ProcessStartInfo
+                                {
+                                    FileName = _ubtPath,
+                                    Arguments = _args.ToString()
+                                };
+
+                                Process _ubtProcess = new Process
+                                {
+                                    StartInfo = _ubtStartInfo
+                                };
+                                _ubtProcess.Start();
+                            }
+                            catch (Exception _ex)
+                            {
+                                Console.WriteLine(_ex.Message);
+                            }
                         }
                     }
                 }
