@@ -48,6 +48,7 @@
     <Compile Include="Commands\GenerateProjectFiles.cs" />
     <Compile Include="Commands\LauncherInstalledObject.cs" />
     <Compile Include="Commands\UProjectFileObject.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnrealExtensionPackage.cs" />
   </ItemGroup>
