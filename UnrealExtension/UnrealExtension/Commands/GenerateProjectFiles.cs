@@ -35,6 +35,10 @@ namespace UnrealExtension.Commands
         /// </summary>
         private readonly AsyncPackage package;
 
+        private readonly MenuCommand m_generateProjectFilesButton;
+
+        private bool m_canGenerateProjectFiles = true;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GenerateProjectFiles"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
@@ -47,8 +51,8 @@ namespace UnrealExtension.Commands
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new MenuCommand(this.Execute, menuCommandID);
-            commandService.AddCommand(menuItem);
+            m_generateProjectFilesButton = new MenuCommand(this.Execute, menuCommandID);
+            commandService.AddCommand(m_generateProjectFilesButton);
         }
 
         /// <summary>
@@ -117,7 +121,7 @@ namespace UnrealExtension.Commands
 
                 VsShellUtilities.ShowMessageBox(
                     package,
-                    "There is no uproject file in the solution folder. Make sure the directory is of an unreal engine project",
+                    "There is no uproject file or GenerateProjectFiles.bat in the solution folder. Make sure the directory is of an unreal engine project or the unreal engine source folder",
                     "No unreal engine directory",
                     OLEMSGICON.OLEMSGICON_CRITICAL,
                     OLEMSGBUTTON.OLEMSGBUTTON_OK,
@@ -149,6 +153,17 @@ namespace UnrealExtension.Commands
                     {
                         const string REGISTRY_ENTRY_PATH = "HKEY_CURRENT_USER\\SOFTWARE\\Epic Games\\Unreal Engine\\Builds";
                         _enginePath = Microsoft.Win32.Registry.GetValue(REGISTRY_ENTRY_PATH, _uprojectFileObject.EngineAssociation, "").ToString();
+                        if (string.IsNullOrEmpty(_enginePath))
+                        {
+                            VsShellUtilities.ShowMessageBox(
+                                package,
+                                "Under the associated unreal engine GUID, we could not find any install location registered in registry. Make sure you've installed the source build properly by following instructions on the github repository of the engine",
+                                "GUID not in registry",
+                                OLEMSGICON.OLEMSGICON_CRITICAL,
+                                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                            return;
+                        }
                     }
                     else
                     {
@@ -170,6 +185,17 @@ namespace UnrealExtension.Commands
                                 }
                             }
                         }
+                        else
+                        {
+                            VsShellUtilities.ShowMessageBox(
+                                package,
+                                "There is no unreal engine version registered. Make sure you've installed an unreal engine version properly",
+                                "No unreal engine registered",
+                                OLEMSGICON.OLEMSGICON_CRITICAL,
+                                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                            return;
+                        }
                     }
                     if (!string.IsNullOrEmpty(_enginePath))
                     {
@@ -178,6 +204,8 @@ namespace UnrealExtension.Commands
                         {
                             string _args = CombineStrings(" ", new string[]
                             {
+                                "/C",
+                                _ubtPath,
                                 "-projectfiles",
                                 $"-project={_uprojectFile}",
                                 "-game",
@@ -185,25 +213,43 @@ namespace UnrealExtension.Commands
                                 "-progress"
                             });
 
-                            try
+                            Utils.RunProgramm("cmd.exe", _args, ProcessUbtExited, ProcessUbtOutput, ProcessUbtOutput);
+                            ToggleGenerateProjectFilesButtonState();
+                        }
+                        else
+                        {
+                            if (!System.IO.Directory.Exists(_enginePath))
                             {
-                                ProcessStartInfo _ubtStartInfo = new ProcessStartInfo
-                                {
-                                    FileName = _ubtPath,
-                                    Arguments = _args.ToString()
-                                };
-
-                                Process _ubtProcess = new Process
-                                {
-                                    StartInfo = _ubtStartInfo
-                                };
-                                _ubtProcess.Start();
+                                VsShellUtilities.ShowMessageBox(
+                                    package,
+                                    "The engine directory found to the associated engine of the project is an invalid path. Please check your installation directory and that your project is associated right",
+                                    "Unreal engine path invalid",
+                                    OLEMSGICON.OLEMSGICON_CRITICAL,
+                                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                                return;
                             }
-                            catch (Exception _ex)
+                            if (!System.IO.File.Exists(_ubtPath))
                             {
-                                Console.WriteLine(_ex.Message);
+                                VsShellUtilities.ShowMessageBox(
+                                    package,
+                                    "The path to unreal build tool exe is invalid. Please make sure that the Unreal Build tool also got build before generating project files",
+                                    "Unreal build tool invalid path",
+                                    OLEMSGICON.OLEMSGICON_CRITICAL,
+                                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                             }
                         }
+                    }
+                    else
+                    {
+                        VsShellUtilities.ShowMessageBox(
+                        package,
+                        "Could not find an engine installation. Make sure you have unreal engine installed and associated with the project you want to update files",
+                        "No Unreal Engine install location",
+                        OLEMSGICON.OLEMSGICON_CRITICAL,
+                        OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                        OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                     }
                 }
             }
@@ -218,6 +264,29 @@ namespace UnrealExtension.Commands
                 _sb.Append(args[i]);
             }
             return _sb.ToString();
+        }
+        private void ToggleGenerateProjectFilesButtonState()
+        {
+            m_canGenerateProjectFiles = !m_canGenerateProjectFiles;
+            m_generateProjectFilesButton.Enabled = m_canGenerateProjectFiles;
+        }
+        private void ProcessUbtExited(object sender, EventArgs args)
+        {
+            ToggleGenerateProjectFilesButtonState();
+        }
+        private void ProcessUbtOutput(object sender, DataReceivedEventArgs args)
+        {
+            Microsoft.VisualStudio.Threading.JoinableTask _task = ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+               {
+                   await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                   IVsOutputWindowPane _pane = package.GetOutputPane(Microsoft.VisualStudio.VSConstants.OutputWindowPaneGuid.BuildOutputPane_guid, "Build");
+                   if (_pane != null)
+                   {
+                       _pane.OutputStringThreadSafe(args.Data + "\n");
+                   }
+               });
+            _task.Join();
         }
     }
 }

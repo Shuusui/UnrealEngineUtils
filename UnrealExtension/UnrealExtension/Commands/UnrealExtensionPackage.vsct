@@ -33,8 +33,17 @@
 
     <Menus>
       <Menu guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbar" priority="0x0000" type="Toolbar">
+        <CommandFlag>DefaultDocked</CommandFlag>
         <Strings>
-          <ButtonText>Unreal Extension</ButtonText>
+          <ButtonText>UnrealExtension</ButtonText>
+          <CommandName>UnrealExtension</CommandName>
+        </Strings>
+      </Menu>
+      <Menu guid="guidUnrealExtensionPackageCmdSet" id="CommandsMenu" priority="0x0000" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS"/>
+        <Strings>
+          <ButtonText>UnrealExtension</ButtonText>
+          <CommandName>UnrealExtension</CommandName>
         </Strings>
       </Menu>
     </Menus>
@@ -44,12 +53,26 @@
          group as the part of a menu contained between two lines. The parent of a group
          must be a menu. -->
     <Groups>
-      <Group guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbarGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      <Group guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbarGroup" priority="0x0000">
+        <Parent guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbar" />
+      </Group>
+      <Group guid="guidUnrealExtensionPackageCmdSet" id="CommandsGroup" priority="0x0000">
+        <Parent guid="guidUnrealExtensionPackageCmdSet" id="CommandsMenu"/>
       </Group>
     </Groups>
 
     <Buttons>
+      <Button guid="guidUnrealExtensionPackageCmdSet" id="GenerateProjectFiles" priority="0x0011" type="Button">
+        <Parent guid="guidUnrealExtensionPackageCmdSet" id="CommandsGroup" />
+        <Icon guid="GenerateProjectFilesIconGUID" id="GenerateProjectFilesIcon"></Icon>
+        <CommandFlag>CommandWellOnly</CommandFlag>
+        <CommandFlag>Pict</CommandFlag>
+        <Strings>
+          <ButtonText>Generate Project Files</ButtonText>
+          <CommandName>GenerateProjectFiles</CommandName>
+        </Strings>
+      </Button>
+
       <Button guid="guidUnrealExtensionPackageCmdSet" id="GenerateProjectFiles" priority="0x0011" type="Button">
         <Parent guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbarGroup" />
         <Icon guid="GenerateProjectFilesIconGUID" id="GenerateProjectFilesIcon"></Icon>
@@ -87,6 +110,8 @@
     <GuidSymbol name="guidUnrealExtensionPackageCmdSet" value="{df59dc26-3f34-408f-b9af-33dccb6c0a1d}">
       <IDSymbol name="UnrealExtensionToolbar" value="0x1000" />
       <IDSymbol name="UnrealExtensionToolbarGroup" value="0x1020" />
+      <IDSymbol name="CommandsMenu" value="0x1021"/>
+      <IDSymbol name="CommandsGroup" value="0x1022"/>
       <IDSymbol name="GenerateProjectFiles" value="0x100" />
     </GuidSymbol>
   
