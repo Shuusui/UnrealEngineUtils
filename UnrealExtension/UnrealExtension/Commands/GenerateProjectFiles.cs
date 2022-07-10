@@ -141,6 +141,7 @@ namespace UnrealExtension.Commands
             }
 
             string _uprojectFile = _uprojectFiles[0];
+            _uprojectFile = _uprojectFile.Replace(@"\", "/");
             using (System.IO.StreamReader _uprojectReader = new System.IO.StreamReader(_uprojectFile))
             {
                 string _uprojectJson = _uprojectReader.ReadToEnd();
@@ -204,16 +205,14 @@ namespace UnrealExtension.Commands
                         {
                             string _args = CombineStrings(" ", new string[]
                             {
-                                "/C",
-                                _ubtPath,
                                 "-projectfiles",
-                                $"-project={_uprojectFile}",
+                                $"-project=\"{_uprojectFile}\"",
                                 "-game",
                                 "-engine",
                                 "-progress"
                             });
 
-                            Utils.RunProgramm("cmd.exe", _args, ProcessUbtExited, ProcessUbtOutput, ProcessUbtOutput);
+                            Utils.RunProgramm($"\"{_ubtPath}\"", _args, ProcessUbtExited, ProcessUbtOutput, ProcessUbtOutput);
                             ToggleGenerateProjectFilesButtonState();
                         }
                         else

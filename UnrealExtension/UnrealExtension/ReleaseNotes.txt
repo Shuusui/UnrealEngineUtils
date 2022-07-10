@@ -1,3 +1,6 @@
+#1.1.1
+- fix paths with spaces would cause that it cannot generate project files
+
 #1.1.0
 - redirect ubt call log to build pane
 - add possibility to use generate project files via keyboard shortcut
