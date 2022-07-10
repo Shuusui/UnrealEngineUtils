@@ -1,5 +1,5 @@
 #1.1.1
-- fix if paths have spaces
+- fix paths with spaces would cause that it cannot generate project files
 
 #1.1.0
 - redirect ubt call log to build pane
