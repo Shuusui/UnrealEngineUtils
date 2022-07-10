@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="UnrealExtension.Windows.PluginManagerToolWindowControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:UnrealExtension="clr-namespace:UnrealExtension"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="450"
+             Name="PluginManagerToolWindow">
+    <Border BorderBrush="#FF000000" BorderThickness="2" CornerRadius="7">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="listbox_plugins" Grid.Column="0" Background="#212121" ItemsSource="{Binding Path=Plugins}" DisplayMemberPath="Name">
+            </ListBox>
+            <GridSplitter Background="#424242" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Width="2"></GridSplitter>
+            <ListBox x:Name="listbox_modules" Grid.Column="1" Background="#212121" ItemsSource="{Binding Path=Modules}" DisplayMemberPath="Name">
+            </ListBox>
+        </Grid>
+    </Border>
+</UserControl>
