@@ -1,3 +1,11 @@
+#1.2.0
+- add plugin tool window to simplify the process of managing plugins and modules
+	- plugins can get added by a simple click after entering a name
+	- plugins can get removed by a click on the remove button if plugin is selected
+
+	- modules can get added to a plugin by a simple click after entering a name
+	- modules can get removed by a click on the remove button if module is selected 
+
 #1.1.1
 - fix paths with spaces would cause that it cannot generate project files
 

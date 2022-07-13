@@ -32,9 +32,9 @@ namespace UnrealExtension.Commands.ControlCommands
             if (System.IO.Directory.Exists(_modulePath))
             {
                 System.IO.Directory.Delete(_modulePath, true);
-                _module.AssociatedPlugin.RemoveModule(_module.Name);
-                _module.AssociatedPlugin.SaveUPluginFile();
             }
+            _module.AssociatedPlugin.RemoveModule(_module.Name);
+            _module.AssociatedPlugin.SaveUPluginFile();
         }
         private PluginManager m_pluginManager;
     }

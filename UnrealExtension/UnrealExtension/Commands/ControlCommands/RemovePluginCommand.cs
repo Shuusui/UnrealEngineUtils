@@ -32,8 +32,8 @@ namespace UnrealExtension.Commands.ControlCommands
             if (System.IO.Directory.Exists(_pluginPath))
             {
                 System.IO.Directory.Delete(_pluginPath, true);
-                _ = m_pluginManager.RemovePlugin(_plugin.Name);
             }
+            _ = m_pluginManager.RemovePlugin(_plugin.Name);
         }
         private PluginManager m_pluginManager;
     }
