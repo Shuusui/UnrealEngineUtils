@@ -92,14 +92,13 @@ namespace UnrealExtension.Commands
             // Get the instance number 0 of this tool window. This window is single instance so this instance
             // is actually the only one.
             // The last flag is set to true so that if the tool window does not exists it will be created.
-            ToolWindowPane window = this.package.FindToolWindow(typeof(PluginManagerToolWindow), 0, true);
-            if ((null == window) || (null == window.Frame))
+            ToolWindowPane _window = this.package.FindToolWindow(typeof(PluginManagerToolWindow), 0, true);
+            if ((null == _window) || (null == _window.Frame))
             {
                 throw new NotSupportedException("Cannot create tool window");
             }
-
-            IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
+            IVsWindowFrame _windowFrame = (IVsWindowFrame)_window.Frame;
+            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(_windowFrame.Show());
         }
     }
 }

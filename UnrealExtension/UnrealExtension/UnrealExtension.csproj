@@ -45,12 +45,35 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\ControlCommands\AddModuleCommand.cs" />
+    <Compile Include="Commands\ControlCommands\OpenAddModuleWindowCommand.cs" />
+    <Compile Include="Commands\ControlCommands\AddPluginCommand.cs" />
+    <Compile Include="Commands\ControlCommands\OpenAddPluginWindowCommand .cs" />
+    <Compile Include="Commands\ControlCommands\RemoveModuleCommand.cs" />
+    <Compile Include="Commands\ControlCommands\RemovePluginCommand.cs" />
     <Compile Include="Commands\GenerateProjectFiles.cs" />
     <Compile Include="Commands\LauncherInstalledObject.cs" />
     <Compile Include="Commands\UProjectFileObject.cs" />
+    <Compile Include="GenerateBuildCsFile.cs" />
+    <Compile Include="GenerateHeaderFile.cs" />
+    <Compile Include="GenerateSourceFile.cs" />
+    <Compile Include="IGenerateFile.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="ModuleObject.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="PluginManager.cs" />
+    <Compile Include="PluginObject.cs" />
+    <Compile Include="UPluginFileObject.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnrealExtensionPackage.cs" />
+    <Compile Include="Windows\ControlWindows\AddModuleWindow.xaml.cs">
+      <DependentUpon>AddModuleWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ControlWindows\AddPluginWindow.xaml.cs">
+      <DependentUpon>AddPluginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DialogWindows\BaseDialogWindow.cs" />
     <Compile Include="Windows\PluginManagerToolWindow.cs" />
     <Compile Include="Commands\PluginManagerToolWindowCommand.cs" />
     <Compile Include="Windows\PluginManagerToolWindowControl.xaml.cs">
@@ -94,10 +117,21 @@
     <Content Include="Windows\Resources\PluginManagerToolWindowCommand.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Windows\ControlWindows\AddModuleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ControlWindows\AddPluginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\PluginManagerToolWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
