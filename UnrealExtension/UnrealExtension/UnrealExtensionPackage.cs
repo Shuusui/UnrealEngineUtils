@@ -28,6 +28,7 @@ namespace UnrealExtension
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(UnrealExtensionPackage.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideToolWindow(typeof(UnrealExtension.Windows.PluginManagerToolWindow))]
     public sealed class UnrealExtensionPackage : AsyncPackage
     {
         /// <summary>
@@ -50,6 +51,7 @@ namespace UnrealExtension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await UnrealExtension.Commands.GenerateProjectFiles.InitializeAsync(this);
+            await UnrealExtension.Commands.PluginManagerToolWindowCommand.InitializeAsync(this);
         }
 
         #endregion

@@ -89,5 +89,45 @@ namespace UnrealExtension
 
             return _programProcess;
         }
+
+        public static void CreateModule(Plugin plugin, string moduleName)
+        {
+            if (!System.IO.Directory.Exists(plugin.PluginSourcePath))
+            {
+                System.IO.Directory.CreateDirectory(plugin.PluginSourcePath);
+            }
+            string _modulePath = System.IO.Path.Combine(plugin.PluginSourcePath, moduleName);
+            System.IO.Directory.CreateDirectory(_modulePath);
+            GenerateBuildCsFile _generateBuildCsFile = new GenerateBuildCsFile(moduleName);
+            System.IO.File.WriteAllLines(
+                System.IO.Path.Combine(
+                    _modulePath, $"{moduleName}.Build.cs"),
+                _generateBuildCsFile.GetGeneratedFileContent());
+
+            string _publicModulePath = System.IO.Path.Combine(_modulePath, "Public");
+            System.IO.Directory.CreateDirectory(_publicModulePath);
+            GenerateHeaderFile _generateHeaderFile = new GenerateHeaderFile(moduleName);
+            System.IO.File.WriteAllLines(
+                System.IO.Path.ChangeExtension(
+                    System.IO.Path.Combine(
+                        _publicModulePath, moduleName),
+                    ".h"),
+                _generateHeaderFile.GetGeneratedFileContent());
+
+            string _privateModulePath = System.IO.Path.Combine(_modulePath, "Private");
+            System.IO.Directory.CreateDirectory(_privateModulePath);
+            GenerateSourceFile _generateSourceFile = new GenerateSourceFile(moduleName);
+            System.IO.File.WriteAllLines(
+                System.IO.Path.ChangeExtension(
+                    System.IO.Path.Combine(
+                        _privateModulePath, moduleName),
+                    ".cpp"),
+                _generateSourceFile.GetGeneratedFileContent());
+            plugin.PluginFileObject.Modules.Add(new ModuleObject
+            {
+                Name = moduleName
+            });
+            plugin.AddModule(moduleName);
+        }
     }
 }

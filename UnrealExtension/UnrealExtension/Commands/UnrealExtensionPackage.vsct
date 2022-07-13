@@ -40,7 +40,7 @@
         </Strings>
       </Menu>
       <Menu guid="guidUnrealExtensionPackageCmdSet" id="CommandsMenu" priority="0x0000" type="Menu">
-        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS"/>
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
         <Strings>
           <ButtonText>UnrealExtension</ButtonText>
           <CommandName>UnrealExtension</CommandName>
@@ -57,7 +57,7 @@
         <Parent guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbar" />
       </Group>
       <Group guid="guidUnrealExtensionPackageCmdSet" id="CommandsGroup" priority="0x0000">
-        <Parent guid="guidUnrealExtensionPackageCmdSet" id="CommandsMenu"/>
+        <Parent guid="guidUnrealExtensionPackageCmdSet" id="CommandsMenu" />
       </Group>
     </Groups>
 
@@ -72,6 +72,15 @@
           <CommandName>GenerateProjectFiles</CommandName>
         </Strings>
       </Button>
+      <Button guid="guidUnrealExtensionPackageCmdSet" id="OpenPluginManager" priority="0x011" type="Button">
+        <Parent guid="guidUnrealExtensionPackageCmdSet" id="CommandsGroup" />
+        <CommandFlag>CommandWellOnly</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <ButtonText>Open PluginManager</ButtonText>
+          <CommandName>OpenPluginManager</CommandName>
+        </Strings>
+      </Button>
 
       <Button guid="guidUnrealExtensionPackageCmdSet" id="GenerateProjectFiles" priority="0x0011" type="Button">
         <Parent guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbarGroup" />
@@ -83,6 +92,15 @@
           <CommandName>GenerateProjectFiles</CommandName>
         </Strings>
       </Button>
+      <Button guid="guidUnrealExtensionPackageCmdSet" id="OpenPluginManager" priority="0x011" type="Button">
+        <Parent guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbarGroup" />
+        <CommandFlag>CommandWellOnly</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <ButtonText>Open PluginManager</ButtonText>
+          <CommandName>OpenPluginManager</CommandName>
+        </Strings>
+      </Button>
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -92,7 +110,7 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="GenerateProjectFilesIconGUID" href="Resources\GenerateProjectFiles.png"/>
+      <Bitmap guid="GenerateProjectFilesIconGUID" href="Resources\GenerateProjectFiles.png" />
     </Bitmaps>
   </Commands>
   
@@ -110,13 +128,15 @@
     <GuidSymbol name="guidUnrealExtensionPackageCmdSet" value="{df59dc26-3f34-408f-b9af-33dccb6c0a1d}">
       <IDSymbol name="UnrealExtensionToolbar" value="0x1000" />
       <IDSymbol name="UnrealExtensionToolbarGroup" value="0x1020" />
-      <IDSymbol name="CommandsMenu" value="0x1021"/>
-      <IDSymbol name="CommandsGroup" value="0x1022"/>
+      <IDSymbol name="CommandsMenu" value="0x1021" />
+      <IDSymbol name="CommandsGroup" value="0x1022" />
       <IDSymbol name="GenerateProjectFiles" value="0x100" />
+      <IDSymbol name="OpenPluginManager" value="0x101" />
     </GuidSymbol>
   
     <GuidSymbol name="GenerateProjectFilesIconGUID" value="{7c6f68c0-01d9-4194-8679-3f2e8f4bb1fe}">
-      <IDSymbol name="GenerateProjectFilesIcon" value="1"/>
+      <IDSymbol name="GenerateProjectFilesIcon" value="1" />
     </GuidSymbol>
+
   </Symbols>
 </CommandTable>

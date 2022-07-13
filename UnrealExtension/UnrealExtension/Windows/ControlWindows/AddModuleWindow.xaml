@@ -1,0 +1,35 @@
+﻿<dialog_windows:BaseDialogWindow x:Class="UnrealExtension.Windows.ControlWindows.AddModuleWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UnrealExtension.Windows.ControlWindows"
+             xmlns:dialog_windows="clr-namespace:UnrealExtension.Windows.DialogWindows"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="300"
+             Title="Add Module"
+             Height="200"
+             Width="300"
+             WindowStartupLocation="CenterScreen"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             Background="{DynamicResource {x:Static vsshell:VsBrushes.BackgroundKey}}"
+             >
+    <StackPanel Orientation="Vertical">
+        <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+            Insert the name of the module:
+        </Label>
+        <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                 Margin="5"
+                 Text="{Binding ModuleName}"
+                 >
+        </TextBox>
+        <Button Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
+                Margin="5"
+                Command="{Binding AddModuleCommand}"
+                CommandParameter="{Binding ModuleName}"
+                >
+            Add
+        </Button>
+    </StackPanel>
+</dialog_windows:BaseDialogWindow>

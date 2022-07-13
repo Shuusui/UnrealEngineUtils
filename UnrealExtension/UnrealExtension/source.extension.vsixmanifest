@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" ?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="UnrealExtension.e91eddac-8efc-45e8-812a-f232fd2e21c7" Version="1.1.1" Language="en-US" Publisher="JosaiProduction" />
+        <Identity Id="UnrealExtension.e91eddac-8efc-45e8-812a-f232fd2e21c7" Version="1.2.0" Language="en-US" Publisher="JosaiProduction" />
         <DisplayName>UnrealExtension</DisplayName>
         <Description xml:space="preserve">A VS Extension to improve productivity of Unreal Engine developers using VS for Unreal Engine development</Description>
         <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
