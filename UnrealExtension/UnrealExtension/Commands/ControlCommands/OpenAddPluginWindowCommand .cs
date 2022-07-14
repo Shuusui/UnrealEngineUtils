@@ -73,7 +73,11 @@ namespace UnrealExtension.Commands.ControlCommands
         }
         private PluginInfo[] GetPlugins()
         {
-            string[] _directories = System.IO.Directory.GetDirectories(m_pluginManager.PluginsDir).OrderBy(str => str).ToArray();
+            if (!System.IO.Directory.Exists(m_pluginManager.SelectedProject.PluginsDir))
+            {
+                return new PluginInfo[0];
+            }
+            string[] _directories = System.IO.Directory.GetDirectories(m_pluginManager.SelectedProject.PluginsDir).OrderBy(str => str).ToArray();
             PluginInfo[] _pluginInfos = new PluginInfo[_directories.Length];
             for (int i = 0; i < _directories.Length; ++i)
             {

@@ -28,7 +28,7 @@ namespace UnrealExtension.Commands.ControlCommands
             {
                 return;
             }
-            string _pluginPath = System.IO.Path.Combine(m_pluginManager.PluginsDir, _plugin.Name);
+            string _pluginPath = System.IO.Path.Combine(m_pluginManager.SelectedProject.PluginsDir, _plugin.Name);
             if (System.IO.Directory.Exists(_pluginPath))
             {
                 System.IO.Directory.Delete(_pluginPath, true);

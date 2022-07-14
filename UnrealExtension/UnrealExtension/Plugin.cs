@@ -17,7 +17,7 @@ namespace UnrealExtension
         {
             Name = pluginName;
             m_pluginManager = pluginManager;
-            PluginPath = System.IO.Path.Combine(pluginManager.PluginsDir, pluginName);
+            PluginPath = System.IO.Path.Combine(pluginManager.SelectedProject.PluginsDir, pluginName);
             PluginSourcePath = System.IO.Path.Combine(PluginPath, "Source");
             UPluginFilePath = System.IO.Path.ChangeExtension(System.IO.Path.Combine(PluginPath, Name), ".uplugin");
             if (System.IO.Directory.Exists(PluginSourcePath))
