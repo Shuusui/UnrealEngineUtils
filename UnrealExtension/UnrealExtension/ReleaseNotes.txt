@@ -1,3 +1,6 @@
+#1.2.2
+- fix buttons showing up two times (this is only a hotfix and not considered a proper solution)
+
 #1.2.1
 - add support for in-engine source build structure to the plugin manager
 - add project selection to support multiple project solutions

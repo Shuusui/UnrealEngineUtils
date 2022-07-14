@@ -54,7 +54,7 @@
          must be a menu. -->
     <Groups>
       <Group guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbarGroup" priority="0x0000">
-        <Parent guid="guidUnrealExtensionPackageCmdSet" id="UnrealExtensionToolbar" />
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
       </Group>
       <Group guid="guidUnrealExtensionPackageCmdSet" id="CommandsGroup" priority="0x0000">
         <Parent guid="guidUnrealExtensionPackageCmdSet" id="CommandsMenu" />
