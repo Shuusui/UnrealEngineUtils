@@ -1,3 +1,7 @@
+#1.2.1
+- add support for in-engine source build structure to the plugin manager
+- add project selection to support multiple project solutions
+
 #1.2.0
 - add plugin tool window to simplify the process of managing plugins and modules
 	- plugins can get added by a simple click after entering a name
