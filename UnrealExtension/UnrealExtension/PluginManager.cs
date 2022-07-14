@@ -8,12 +8,17 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using UnrealExtension.Commands;
 using UnrealExtension.Commands.ControlCommands;
 
 namespace UnrealExtension
 {
     public class PluginManager : INotifyPropertyChanged
     {
+        public PluginManager()
+        {
+            UpdatePluginsList();
+        }
         public bool AddPlugin(Plugin plugin)
         {
             foreach (Plugin _plugin in m_plugins)
@@ -62,42 +67,39 @@ namespace UnrealExtension
                 SetPropertyValue(ref m_selectedPlugin, value);
             }
         }
-        private string m_projectName = string.Empty;
-        public string ProjectName
-        {
-            get
-            {
-                return m_projectName;
-            }
-            set
-            {
-                SetPropertyValue(ref m_projectName, value);
-            }
-        }
         public string AvailablePluginsTitle
         {
             get
             {
-                return $"Available Plugins of {m_projectName}:";
+                return $"Available Plugins of {SelectedProject.ProjectName}:";
             }
         }
-        private IVsSolution m_solution;
-        public IVsSolution Solution
+        private UProjectFileInfo m_selectedProject;
+        public UProjectFileInfo SelectedProject
         {
-            get { return m_solution; }
+            get
+            {
+                if (m_selectedProject == null)
+                {
+                    m_selectedProject = PluginManagerToolWindowCommand.Instance.ProjectFileInfos[0];
+                }
+                return m_selectedProject;
+            }
             set
             {
-                ThreadHelper.ThrowIfNotOnUIThread();
-
-                value.GetSolutionInfo(out string _slnDir, out string _, out string _);
-                PluginsDir = System.IO.Path.Combine(_slnDir, "Plugins");
-                string[] _uprojectFilePaths = System.IO.Directory.GetFiles(_slnDir, "*.uproject");
-                if (_uprojectFilePaths.Length > 0)
-                {
-                    ProjectName = System.IO.Path.GetFileNameWithoutExtension(_uprojectFilePaths[0]);
-                    SetPropertyValue(ref m_solution, value);
-                    UpdatePluginsList();
-                }
+                SetPropertyValue(ref m_selectedProject, value);
+                UpdatePluginsList();
+            }
+        }
+        public List<UProjectFileInfo> Projects
+        {
+            get
+            {
+                return PluginManagerToolWindowCommand.Instance.ProjectFileInfos;
+            }
+            private set
+            {
+                PluginManagerToolWindowCommand.Instance.ProjectFileInfos = value;
             }
         }
         private System.Windows.Input.ICommand _openAddPluginWindowCommand;
@@ -124,14 +126,12 @@ namespace UnrealExtension
                 return _removePluginCommand;
             }
         }
-
-
         public void UpdatePluginsList()
         {
             ObservableCollection<Plugin> _plugins = new ObservableCollection<Plugin>();
-            if (System.IO.Directory.Exists(m_pluginsDir))
+            if (System.IO.Directory.Exists(SelectedProject.PluginsDir))
             {
-                string[] _pluginDirs = System.IO.Directory.GetDirectories(m_pluginsDir);
+                string[] _pluginDirs = System.IO.Directory.GetDirectories(SelectedProject.PluginsDir);
                 foreach (string _pluginDir in _pluginDirs)
                 {
                     string[] _pluginFilePaths = System.IO.Directory.GetFiles(_pluginDir, "*.uplugin");
@@ -142,16 +142,6 @@ namespace UnrealExtension
                 }
             }
             Plugins = _plugins;
-        }
-
-        private string m_pluginsDir;
-        public string PluginsDir
-        {
-            get { return m_pluginsDir; }
-            set
-            {
-                SetPropertyValue(ref m_pluginsDir, value);
-            }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] string propertyName = null)

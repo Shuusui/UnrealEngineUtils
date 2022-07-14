@@ -64,6 +64,7 @@
     <Compile Include="PluginManager.cs" />
     <Compile Include="PluginObject.cs" />
     <Compile Include="UPluginFileObject.cs" />
+    <Compile Include="UProjectFileInfo.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnrealExtensionPackage.cs" />

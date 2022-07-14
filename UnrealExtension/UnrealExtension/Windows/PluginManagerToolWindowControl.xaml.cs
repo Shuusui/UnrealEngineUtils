@@ -28,7 +28,6 @@ namespace UnrealExtension.Windows
             InitializeComponent();
             DataContext = PluginManagerInstance;
 
-            PluginManagerInstance.Solution = (IVsSolution)Package.GetGlobalService(typeof(IVsSolution));
         }
         public PluginManager PluginManagerInstance { get; set; }
     }
