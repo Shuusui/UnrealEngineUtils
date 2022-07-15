@@ -22,8 +22,7 @@
         <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                  Margin="5"
                  Text="{Binding ModuleName}"
-                 >
-        </TextBox>
+                 />
         <Button Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
                 Margin="5"
                 Command="{Binding AddModuleCommand}"

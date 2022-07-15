@@ -7,14 +7,15 @@
              xmlns:dialog_windows="clr-namespace:UnrealExtension.Windows.DialogWindows"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="300"
+             d:DesignHeight="500" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=local:AddPluginWindow}"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.BackgroundKey}}"
              Title="Add Plugin"
-             Height="200"
-             Width="300"
+             MinHeight="200"
+             MinWidth="300"
              WindowStartupLocation="CenterScreen"
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             SizeToContent="WidthAndHeight"
              >
     <StackPanel Orientation="Vertical">
         <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
@@ -22,13 +23,237 @@
         </Label>
         <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                  Margin="5"
-                 Text="{Binding PluginName}"
+                 Text="{Binding Path=PluginInformation.PluginName}"
                  >
         </TextBox>
+        <Expander>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Friendly Name
+                    </Label>
+                    <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                         Margin="2"
+                         Grid.Column="1"
+                         Text="{Binding Path=PluginInformation.FriendlyName}"
+                    />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Description
+                    </Label>
+                    <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                         Margin="2"
+                         Grid.Column="1"
+                         Text="{Binding Path=PluginInformation.Description}"
+                    />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Category
+                    </Label>
+                    <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                         Margin="2"
+                         Grid.Column="1"
+                         Text="{Binding Path=PluginInformation.Category}"
+                    />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Created By
+                    </Label>
+                    <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                         Margin="2"
+                         Grid.Column="1"
+                         Text="{Binding Path=PluginInformation.CreatedBy}"
+                    />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Created By URL
+                    </Label>
+                    <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                         Margin="2"
+                         Grid.Column="1"
+                         Text="{Binding Path=PluginInformation.CreatedByURL}"
+                    />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Docs URL
+                    </Label>
+                    <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                         Margin="2"
+                         Grid.Column="1"
+                         Text="{Binding Path=PluginInformation.DocsURL}"
+                    />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Marketplace URL
+                    </Label>
+                    <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                         Margin="2"
+                         Grid.Column="1"
+                         Text="{Binding Path=PluginInformation.MarketplaceURL}"
+                    />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Support URL
+                    </Label>
+                    <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                         Margin="2"
+                         Grid.Column="1"
+                         Text="{Binding Path=PluginInformation.SupportURL}"
+                    />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Can contain content
+                    </Label>
+                    <RadioButton Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogRadioButtonStyleKey}}"
+                                 Margin="2"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Is Beta Version
+                    </Label>
+                    <RadioButton Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogRadioButtonStyleKey}}"
+                                 Margin="2"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Is Experimental Version
+                    </Label>
+                    <RadioButton Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogRadioButtonStyleKey}}"
+                                 Margin="2"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                        Installed
+                    </Label>
+                    <RadioButton Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogRadioButtonStyleKey}}"
+                                 Margin="2"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 />
+                </Grid>
+                <ListView Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogListViewStyleKey}}"
+                          Margin="2"
+                          ItemsSource="{Binding PluginInformation.Modules}"
+                          >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                                    Module Name
+                                </Label>
+                                <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
+                                     Margin="2"
+                                     Grid.Column="1"
+                                     Text="{Binding Name}"
+                                     
+                                />
+                                <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"
+                                       Grid.Row="1" >
+                                    Type
+                                </Label>
+                                <ComboBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
+                                          ItemsSource="{Binding AvailableTypes}"
+                                          SelectedIndex="0"
+                                          Grid.Row="1" 
+                                          Grid.Column="1"
+                                          HorizontalAlignment="Center"
+                                          />
+                                <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"
+                                       Grid.Row="2"
+                                       >
+                                    Loading Phase
+                                </Label>
+                                <ComboBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
+                                          ItemsSource="{Binding AvailableLoadingPhase}"
+                                          SelectedIndex="6"
+                                          Grid.Row="2"
+                                          Grid.Column="1"
+                                          HorizontalAlignment="Center"
+                                          />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Expander>
         <Button Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"
                 Margin="5"
                 Command="{Binding AddPluginCommand}"
-                CommandParameter="{Binding PluginName}"
+                CommandParameter="{Binding PluginInformation}"
                 >
             Add
         </Button>

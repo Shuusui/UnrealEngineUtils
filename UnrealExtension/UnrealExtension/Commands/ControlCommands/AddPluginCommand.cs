@@ -31,18 +31,18 @@ namespace UnrealExtension.Commands.ControlCommands
             {
                 throw new ArgumentNullException();
             }
-            string _pluginName = parameter.ToString();
-            if (string.IsNullOrEmpty(_pluginName))
+            UPluginFileObject _pluginFileObject = (UPluginFileObject)parameter;
+            if (string.IsNullOrEmpty(_pluginFileObject.PluginName))
             {
                 MessageBox.Show("There is no plugin name configured",
                     "Plugin name null",
                     MessageBoxButtons.OK);
                 return;
             }
-            Plugin _plugin = new Plugin(m_pluginManager, _pluginName);
+            Plugin _plugin = new Plugin(m_pluginManager, _pluginFileObject.PluginName);
             if (System.IO.File.Exists(_plugin.PluginPath))
             {
-                DialogResult _result = MessageBox.Show($"A plugin with the name {_pluginName} does already exist. Do you want to replace it with a default one?"
+                DialogResult _result = MessageBox.Show($"A plugin with the name {_pluginFileObject.PluginName} does already exist. Do you want to replace it with a default one?"
                     , "Plugin already exists", MessageBoxButtons.YesNo);
                 if (_result == DialogResult.Yes)
                 {
@@ -53,12 +53,10 @@ namespace UnrealExtension.Commands.ControlCommands
                     return;
                 }
             }
+            _plugin.PluginFileObject = _pluginFileObject;
             System.IO.Directory.CreateDirectory(_plugin.PluginPath);
-            _plugin.PluginFileObject = new UPluginFileObject()
-            {
-                FriendlyName = _pluginName
-            };
-            Utils.CreateModule(_plugin, _pluginName);
+
+            Utils.CreateModule(_plugin, _pluginFileObject.PluginName);
             _plugin.SaveUPluginFile();
             _ = m_pluginManager.AddPlugin(_plugin);
         }

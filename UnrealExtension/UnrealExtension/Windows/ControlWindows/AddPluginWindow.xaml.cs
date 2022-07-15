@@ -42,13 +42,13 @@ namespace UnrealExtension.Windows.ControlWindows
                 return m_addPluginCommand;
             }
         }
-        private string m_pluginName = string.Empty;
-        public string PluginName
+        private UPluginFileObject m_pluginInformation = new UPluginFileObject();
+        public UPluginFileObject PluginInformation
         {
-            get { return m_pluginName; }
+            get { return m_pluginInformation; }
             set
             {
-                SetPropertyValue(ref m_pluginName, value);
+                SetPropertyValue(ref m_pluginInformation, value);
             }
         }
         protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
