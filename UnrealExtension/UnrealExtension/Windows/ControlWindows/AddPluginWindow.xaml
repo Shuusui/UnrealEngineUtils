@@ -1,4 +1,4 @@
-﻿<dialog_windows:BaseDialogWindow x:Class="UnrealExtension.Windows.ControlWindows.AddPluginWindow"
+﻿<dialog_windows:NotifiableDialogWindow x:Class="UnrealExtension.Windows.ControlWindows.AddPluginWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -23,7 +23,7 @@
         </Label>
         <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                  Margin="5"
-                 Text="{Binding Path=PluginInformation.PluginName}"
+                 Text="{Binding PluginInformation.PluginName}"
                  >
         </TextBox>
         <Expander>
@@ -39,7 +39,7 @@
                     <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                          Margin="2"
                          Grid.Column="1"
-                         Text="{Binding Path=PluginInformation.FriendlyName}"
+                         Text="{Binding PluginInformation.FriendlyName}"
                     />
                 </Grid>
                 <Grid>
@@ -53,7 +53,7 @@
                     <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                          Margin="2"
                          Grid.Column="1"
-                         Text="{Binding Path=PluginInformation.Description}"
+                         Text="{Binding PluginInformation.Description}"
                     />
                 </Grid>
                 <Grid>
@@ -67,7 +67,7 @@
                     <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                          Margin="2"
                          Grid.Column="1"
-                         Text="{Binding Path=PluginInformation.Category}"
+                         Text="{Binding PluginInformation.Category}"
                     />
                 </Grid>
                 <Grid>
@@ -81,7 +81,7 @@
                     <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                          Margin="2"
                          Grid.Column="1"
-                         Text="{Binding Path=PluginInformation.CreatedBy}"
+                         Text="{Binding PluginInformation.CreatedBy}"
                     />
                 </Grid>
                 <Grid>
@@ -95,7 +95,7 @@
                     <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                          Margin="2"
                          Grid.Column="1"
-                         Text="{Binding Path=PluginInformation.CreatedByURL}"
+                         Text="{Binding PluginInformation.CreatedByURL}"
                     />
                 </Grid>
                 <Grid>
@@ -109,7 +109,7 @@
                     <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                          Margin="2"
                          Grid.Column="1"
-                         Text="{Binding Path=PluginInformation.DocsURL}"
+                         Text="{Binding PluginInformation.DocsURL}"
                     />
                 </Grid>
                 <Grid>
@@ -123,7 +123,7 @@
                     <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                          Margin="2"
                          Grid.Column="1"
-                         Text="{Binding Path=PluginInformation.MarketplaceURL}"
+                         Text="{Binding PluginInformation.MarketplaceURL}"
                     />
                 </Grid>
                 <Grid>
@@ -137,7 +137,7 @@
                     <TextBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
                          Margin="2"
                          Grid.Column="1"
-                         Text="{Binding Path=PluginInformation.SupportURL}"
+                         Text="{Binding PluginInformation.SupportURL}"
                     />
                 </Grid>
                 <Grid>
@@ -148,10 +148,11 @@
                     <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
                         Can contain content
                     </Label>
-                    <RadioButton Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogRadioButtonStyleKey}}"
+                    <CheckBox Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.CheckBoxStyleKey}}"
                                  Margin="2"
-                                 HorizontalAlignment="Center"
+                                 HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
+                                 IsChecked="{Binding PluginInformation.CanContainContent}"
                                  />
                 </Grid>
                 <Grid>
@@ -162,10 +163,11 @@
                     <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
                         Is Beta Version
                     </Label>
-                    <RadioButton Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogRadioButtonStyleKey}}"
+                    <CheckBox Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.CheckBoxStyleKey}}"
                                  Margin="2"
-                                 HorizontalAlignment="Center"
+                                 HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
+                                 IsChecked="{Binding PluginInformation.IsBetaVersion}"
                                  />
                 </Grid>
                 <Grid>
@@ -176,10 +178,11 @@
                     <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
                         Is Experimental Version
                     </Label>
-                    <RadioButton Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogRadioButtonStyleKey}}"
+                    <CheckBox Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.CheckBoxStyleKey}}"
                                  Margin="2"
-                                 HorizontalAlignment="Center"
+                                 HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
+                                 IsChecked="{Binding PluginInformation.IsExperimentalVersion}"
                                  />
                 </Grid>
                 <Grid>
@@ -190,15 +193,20 @@
                     <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
                         Installed
                     </Label>
-                    <RadioButton Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogRadioButtonStyleKey}}"
+                    <CheckBox Grid.Column="1" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.CheckBoxStyleKey}}"
                                  Margin="2"
-                                 HorizontalAlignment="Center"
+                                 HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
+                                 IsChecked="{Binding PluginInformation.Installed}"
                                  />
                 </Grid>
+                <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
+                    Plugin Modules:
+                </Label>
                 <ListView Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogListViewStyleKey}}"
                           Margin="2"
                           ItemsSource="{Binding PluginInformation.Modules}"
+                          HorizontalContentAlignment="Stretch"
                           >
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -211,6 +219,8 @@
                                     <RowDefinition/>
                                     <RowDefinition/>
                                     <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}">
                                     Module Name
@@ -219,7 +229,7 @@
                                      Margin="2"
                                      Grid.Column="1"
                                      Text="{Binding Name}"
-                                     
+                                     HorizontalAlignment="Stretch"
                                 />
                                 <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"
                                        Grid.Row="1" >
@@ -228,9 +238,11 @@
                                 <ComboBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
                                           ItemsSource="{Binding AvailableTypes}"
                                           SelectedIndex="0"
+                                          SelectedItem="{Binding Type}"
                                           Grid.Row="1" 
                                           Grid.Column="1"
-                                          HorizontalAlignment="Center"
+                                          HorizontalAlignment="Stretch"
+                                          Margin="2"
                                           />
                                 <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"
                                        Grid.Row="2"
@@ -239,11 +251,41 @@
                                 </Label>
                                 <ComboBox Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
                                           ItemsSource="{Binding AvailableLoadingPhase}"
+                                          SelectedItem="{Binding LoadingPhase}"
                                           SelectedIndex="6"
                                           Grid.Row="2"
                                           Grid.Column="1"
-                                          HorizontalAlignment="Center"
+                                          Margin="2"
+                                          HorizontalAlignment="Stretch"
                                           />
+                                <Expander 
+                                    Grid.Row="3"
+                                    Grid.ColumnSpan="2"
+                                    >
+                                    <StackPanel>
+                                        <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"
+                                               >
+                                            Whitelist Platforms
+                                        </Label>
+                                        <ListView Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogListViewStyleKey}}"
+                                                  Margin="2"
+                                                  ItemsSource="{Binding WhitelistPlatforms}"
+                                                  HorizontalContentAlignment="Stretch"
+                                                  >
+                                        </ListView>
+                                        <Label Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"
+                                                Grid.Row="4"
+                                               >
+                                            Blacklist Platforms
+                                        </Label>
+                                        <ListView Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogListViewStyleKey}}"
+                                                  Margin="2"
+                                                  ItemsSource="{Binding BlacklistPlatforms}"
+                                                  HorizontalContentAlignment="Stretch"
+                                                  >
+                                        </ListView>
+                                    </StackPanel>
+                                </Expander>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -258,4 +300,4 @@
             Add
         </Button>
     </StackPanel>
-</dialog_windows:BaseDialogWindow>
+</dialog_windows:NotifiableDialogWindow>

@@ -1,4 +1,4 @@
-﻿<dialog_windows:BaseDialogWindow x:Class="UnrealExtension.Windows.ControlWindows.AddModuleWindow"
+﻿<dialog_windows:NotifiableDialogWindow x:Class="UnrealExtension.Windows.ControlWindows.AddModuleWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -31,4 +31,4 @@
             Add
         </Button>
     </StackPanel>
-</dialog_windows:BaseDialogWindow>
+</dialog_windows:NotifiableDialogWindow>

@@ -13,7 +13,7 @@ using UnrealExtension.Commands.ControlCommands;
 
 namespace UnrealExtension
 {
-    public class PluginManager : INotifyPropertyChanged
+    public class PluginManager : NotifiableProperty
     {
         public PluginManager()
         {
@@ -142,16 +142,6 @@ namespace UnrealExtension
                 }
             }
             Plugins = _plugins;
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (value == null ? field == null : value.Equals(field))
-            {
-                return;
-            }
-            field = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

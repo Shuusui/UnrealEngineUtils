@@ -11,7 +11,7 @@ using UnrealExtension.Windows;
 
 namespace UnrealExtension
 {
-    public class Plugin : INotifyPropertyChanged
+    public class Plugin : NotifiableProperty
     {
         public Plugin(PluginManager pluginManager, string pluginName)
         {
@@ -103,7 +103,6 @@ namespace UnrealExtension
                 return $"Available Modules of {m_name}:";
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
         private System.Windows.Input.ICommand _openAddModuleWindowCommand;
         public System.Windows.Input.ICommand OpenAddModuleWindowCommand
         {
@@ -127,15 +126,6 @@ namespace UnrealExtension
                 }
                 return _removeModuleCommand;
             }
-        }
-        protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (value == null ? field == null : value.Equals(field))
-            {
-                return;
-            }
-            field = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         private PluginManager m_pluginManager;
         public string PluginPath { get; private set; }

@@ -60,6 +60,7 @@
     <Compile Include="IGenerateFile.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="ModuleObject.cs" />
+    <Compile Include="NotifiableProperty.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginManager.cs" />
     <Compile Include="PluginObject.cs" />
@@ -75,6 +76,7 @@
       <DependentUpon>AddPluginWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DialogWindows\BaseDialogWindow.cs" />
+    <Compile Include="Windows\DialogWindows\NotifiableDialogWindow.cs" />
     <Compile Include="Windows\PluginManagerToolWindow.cs" />
     <Compile Include="Commands\PluginManagerToolWindowCommand.cs" />
     <Compile Include="Windows\PluginManagerToolWindowControl.xaml.cs">

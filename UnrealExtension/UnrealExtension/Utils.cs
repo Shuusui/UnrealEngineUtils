@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnrealExtension.Commands;
 
 namespace UnrealExtension
 {
@@ -123,11 +127,61 @@ namespace UnrealExtension
                         _privateModulePath, moduleName),
                     ".cpp"),
                 _generateSourceFile.GetGeneratedFileContent());
-            plugin.PluginFileObject.Modules.Add(new ModuleObject
-            {
-                Name = moduleName
-            });
             plugin.AddModule(moduleName);
+        }
+        public enum EnginePathError
+        {
+            None,
+            GUIDPathNotFound,
+            InstalledEngineNotFound
+        }
+        public static string GetEnginePath(UProjectFileObject uprojectFileObject, out string errorMsg, out EnginePathError enginePathError)
+        {
+            errorMsg = string.Empty;
+            enginePathError = EnginePathError.None;
+            string _enginePath = string.Empty;
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                if (Guid.TryParse(uprojectFileObject.EngineAssociation, out Guid _))
+                {
+                    const string REGISTRY_ENTRY_PATH = "HKEY_CURRENT_USER\\SOFTWARE\\Epic Games\\Unreal Engine\\Builds";
+                    _enginePath = Microsoft.Win32.Registry.GetValue(REGISTRY_ENTRY_PATH, uprojectFileObject.EngineAssociation, "").ToString();
+                    if (string.IsNullOrEmpty(_enginePath))
+                    {
+                        errorMsg = "Under the associated unreal engine GUID, we could not find any install location registered in registry. Make sure you've installed the source build properly by following instructions on the github repository of the engine";
+                        enginePathError = EnginePathError.GUIDPathNotFound;
+                        return _enginePath;
+                    }
+                }
+                else
+                {
+                    string _programDataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                    string _launcherInstalledPath = System.IO.Path.Combine(_programDataFolderPath, "Epic", "UnrealEngineLauncher", "LauncherInstalled.dat");
+                    if (System.IO.File.Exists(_launcherInstalledPath))
+                    {
+                        using (System.IO.StreamReader _launcherInstalledReader = new System.IO.StreamReader(_launcherInstalledPath))
+                        {
+                            string _launcherInstalledJson = _launcherInstalledReader.ReadToEnd();
+                            LauncherInstalledObject _launcherInstalledObject = JsonConvert.DeserializeObject<LauncherInstalledObject>(_launcherInstalledJson);
+                            foreach (Installation _installation in _launcherInstalledObject.InstallationList)
+                            {
+                                if (_installation.NamespaceId == "ue" && _installation.AppName.Contains(uprojectFileObject.EngineAssociation))
+                                {
+                                    _enginePath = _installation.InstallLocation;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        errorMsg = "There is no unreal engine version registered. Make sure you've installed an unreal engine version properly";
+                        enginePathError = EnginePathError.InstalledEngineNotFound;
+                        return _enginePath;
+                    }
+                }
+            }
+            return _enginePath;
         }
     }
 }

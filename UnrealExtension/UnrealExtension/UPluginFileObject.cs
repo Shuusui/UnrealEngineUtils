@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace UnrealExtension
 {
-    public class UPluginFileObject : INotifyPropertyChanged
+    public class UPluginFileObject : NotifiableProperty
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private bool m_friendlyNameEdited = false;
         public int FileVersion { get; set; } = 3;
         public int Version { get; set; } = 1;
@@ -23,6 +21,14 @@ namespace UnrealExtension
             get { return m_pluginName; }
             set
             {
+                bool _moduleNameEdited = false;
+                if (Modules.Count > 0)
+                {
+                    if (Modules[0].Name != m_pluginName)
+                    {
+                        _moduleNameEdited = true;
+                    }
+                }
                 SetPropertyValue(ref m_pluginName, value);
                 if (!m_friendlyNameEdited)
                 {
@@ -31,6 +37,10 @@ namespace UnrealExtension
                 if (m_friendlyName == m_pluginName)
                 {
                     m_friendlyNameEdited = false;
+                }
+                if (Modules.Count > 0 && !_moduleNameEdited)
+                {
+                    Modules[0].Name = m_pluginName;
                 }
             }
         }
@@ -145,17 +155,12 @@ namespace UnrealExtension
         public bool Installed
         {
             get { return m_installed; }
+            set
+            {
+                SetPropertyValue(ref m_installed, value);
+            }
         }
         public List<ModuleObject> Modules { get; set; } = new List<ModuleObject>() { new ModuleObject() };
         public List<PluginObject> Plugins { get; set; } = new List<PluginObject>();
-        protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (value == null ? field == null : value.Equals(field))
-            {
-                return;
-            }
-            field = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

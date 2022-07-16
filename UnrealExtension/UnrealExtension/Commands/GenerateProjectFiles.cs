@@ -149,54 +149,27 @@ namespace UnrealExtension.Commands
                 UProjectFileObject _uprojectFileObject = JsonConvert.DeserializeObject<UProjectFileObject>(_uprojectJson);
                 if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
                 {
-                    string _enginePath = string.Empty;
-                    if (Guid.TryParse(_uprojectFileObject.EngineAssociation, out Guid _))
+                    string _enginePath = Utils.GetEnginePath(_uprojectFileObject, out string _errorMsg, out Utils.EnginePathError _enginePathError);
+                    switch (_enginePathError)
                     {
-                        const string REGISTRY_ENTRY_PATH = "HKEY_CURRENT_USER\\SOFTWARE\\Epic Games\\Unreal Engine\\Builds";
-                        _enginePath = Microsoft.Win32.Registry.GetValue(REGISTRY_ENTRY_PATH, _uprojectFileObject.EngineAssociation, "").ToString();
-                        if (string.IsNullOrEmpty(_enginePath))
-                        {
+                        case Utils.EnginePathError.GUIDPathNotFound:
                             VsShellUtilities.ShowMessageBox(
                                 package,
-                                "Under the associated unreal engine GUID, we could not find any install location registered in registry. Make sure you've installed the source build properly by following instructions on the github repository of the engine",
+                                _errorMsg,
                                 "GUID not in registry",
                                 OLEMSGICON.OLEMSGICON_CRITICAL,
                                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        string _programDataFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                        string _launcherInstalledPath = System.IO.Path.Combine(_programDataFolderPath, "Epic", "UnrealEngineLauncher", "LauncherInstalled.dat");
-                        if (System.IO.File.Exists(_launcherInstalledPath))
-                        {
-                            using (System.IO.StreamReader _launcherInstalledReader = new System.IO.StreamReader(_launcherInstalledPath))
-                            {
-                                string _launcherInstalledJson = _launcherInstalledReader.ReadToEnd();
-                                LauncherInstalledObject _launcherInstalledObject = JsonConvert.DeserializeObject<LauncherInstalledObject>(_launcherInstalledJson);
-                                foreach (Installation _installation in _launcherInstalledObject.InstallationList)
-                                {
-                                    if (_installation.NamespaceId == "ue" && _installation.AppName.Contains(_uprojectFileObject.EngineAssociation))
-                                    {
-                                        _enginePath = _installation.InstallLocation;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
+                            break;
+                        case Utils.EnginePathError.InstalledEngineNotFound:
                             VsShellUtilities.ShowMessageBox(
-                                package,
-                                "There is no unreal engine version registered. Make sure you've installed an unreal engine version properly",
-                                "No unreal engine registered",
-                                OLEMSGICON.OLEMSGICON_CRITICAL,
-                                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                            return;
-                        }
+                            package,
+                            _errorMsg,
+                            "No unreal engine registered",
+                            OLEMSGICON.OLEMSGICON_CRITICAL,
+                            OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                            OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                            break;
                     }
                     if (!string.IsNullOrEmpty(_enginePath))
                     {

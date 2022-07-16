@@ -53,12 +53,42 @@ namespace UnrealExtension.Commands.ControlCommands
                     return;
                 }
             }
+
             _plugin.PluginFileObject = _pluginFileObject;
             System.IO.Directory.CreateDirectory(_plugin.PluginPath);
+            string _resourcesPath = System.IO.Path.Combine(_plugin.PluginPath, "Resources");
+            System.IO.Directory.CreateDirectory(_resourcesPath);
 
-            Utils.CreateModule(_plugin, _pluginFileObject.PluginName);
+            string _enginePath = Utils.GetEnginePath(m_pluginManager.SelectedProject.ProjectFileObject, out string _, out Utils.EnginePathError _);
+            if (!string.IsNullOrEmpty(_enginePath))
+            {
+                CopyPluginIcon(_enginePath, _resourcesPath);
+            }
+
+            foreach (ModuleObject _moduleObject in _plugin.PluginFileObject.Modules)
+            {
+                Utils.CreateModule(_plugin, _moduleObject.Name);
+            }
             _plugin.SaveUPluginFile();
             _ = m_pluginManager.AddPlugin(_plugin);
+        }
+
+        private void CopyPluginIcon(string enginePath, string resourcesPath)
+        {
+            string _iconPath = System.IO.Path.Combine(enginePath,
+                "Engine",
+                "Plugins",
+                "Editor",
+                "PluginBrowser",
+                "Templates",
+                "Blank",
+                "Resources",
+                "Icon128.png");
+            if (!System.IO.File.Exists(_iconPath))
+            {
+                return;
+            }
+            System.IO.File.Copy(_iconPath, System.IO.Path.Combine(resourcesPath, System.IO.Path.GetFileName(_iconPath)));
         }
 
         private PluginManager m_pluginManager;

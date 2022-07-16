@@ -22,14 +22,13 @@ namespace UnrealExtension.Windows.ControlWindows
     /// <summary>
     /// Interaction logic for AddPluginWindow.xaml
     /// </summary>
-    public partial class AddPluginWindow : BaseDialogWindow, INotifyPropertyChanged
+    public partial class AddPluginWindow : NotifiableDialogWindow
     {
         public AddPluginWindow(PluginManager pluginManager)
         {
             m_pluginManager = pluginManager;
             InitializeComponent();
         }
-        public event PropertyChangedEventHandler PropertyChanged;
         private ICommand m_addPluginCommand;
         public ICommand AddPluginCommand
         {
@@ -50,15 +49,6 @@ namespace UnrealExtension.Windows.ControlWindows
             {
                 SetPropertyValue(ref m_pluginInformation, value);
             }
-        }
-        protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (value == null ? field == null : value.Equals(field))
-            {
-                return;
-            }
-            field = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         private PluginManager m_pluginManager;
     }

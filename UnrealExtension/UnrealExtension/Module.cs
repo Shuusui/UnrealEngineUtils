@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace UnrealExtension
 {
-    public class Module : INotifyPropertyChanged
+    public class Module : NotifiableProperty
     {
         public Module(Plugin associatedPlugin)
         {
@@ -34,16 +34,6 @@ namespace UnrealExtension
             {
                 SetPropertyValue(ref m_name, value);
             }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void SetPropertyValue<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (value == null ? field == null : value.Equals(field))
-            {
-                return;
-            }
-            field = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

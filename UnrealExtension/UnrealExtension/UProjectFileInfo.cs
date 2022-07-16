@@ -18,5 +18,31 @@ namespace UnrealExtension
                 return System.IO.Path.Combine(DirPath, "Plugins");
             }
         }
+        private UProjectFileObject m_projectFileObject = null;
+        public UProjectFileObject ProjectFileObject
+        {
+            get
+            {
+                if (m_projectFileObject == null && !string.IsNullOrEmpty(ProjectFilePath))
+                {
+                    try
+                    {
+                        using (System.IO.StreamReader _reader = new System.IO.StreamReader(ProjectFilePath))
+                        {
+                            m_projectFileObject = Newtonsoft.Json.JsonConvert.DeserializeObject<UProjectFileObject>(_reader.ReadToEnd());
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
+                return m_projectFileObject;
+            }
+            set
+            {
+                m_projectFileObject = value;
+            }
+        }
     }
 }

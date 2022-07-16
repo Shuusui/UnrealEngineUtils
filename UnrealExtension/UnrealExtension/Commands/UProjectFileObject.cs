@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UnrealExtension.Commands
+namespace UnrealExtension
 {
     public class UProjectFileObject
     {
